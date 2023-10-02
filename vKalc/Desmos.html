@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=0.83" />
+        <title>Dosmos API</title>
+        <script src="https://www.desmos.com/api/v1.5/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6"></script>
+    </head>
+    <body>
+        <div id="calculator" style="width: 440px; height: 440px;"></div>
+        <script>
+            var elt = document.getElementById('calculator');
+            
+            function manageGraph(displayExpresion, graphFormula) {
+                console.log("function called")
+                var calculator = Desmos.GraphingCalculator(elt, {expressions: displayExpresion, keypad: false});
+                calculator.setExpression({ id: 'graph1', latex: `${graphFormula}` });
+               // calculator = Desmos.GraphingCalculator(elt, { autosize: false });
+                // Resize the calculator explicitly.
+               // elt.style.width = 'device-width';
+               // elt.style.height = 'device-height';
+               // calculator.resize();
+
+                calculator.observe('expressionAnalysis', function() {
+                        for (var id in calculator.expressionAnalysis) {
+                           var analysis = calculator.expressionAnalysis[id];
+                               if (analysis.isGraphable) {
+                                    console.log('This expression can be plotted.');
+                                    location.href = "https://www.yoursite.com?status=1";
+                                    return true;
+                               }
+                               if (analysis.isError) {
+                                    console.log(`Expression '${id}': ${analysis.errorMessage}`);
+                                    location.href = "https://www.yoursite.com?status=0";
+                                    return false;
+                               }
+                               if (analysis.evaluation) console.log(`value: ${analysis.evaluation.value}`);
+                         }
+                   });
+            }
+            
+        // manageGraph(false, 'y=x^3 + x^2 + 7');
+        
+        // var calculator = Desmos.GraphingCalculator(elt, {expressions: false, keypad: false});
+        // calculator.setExpression({ id: 'graph2', latex: 'y=x^3 + x^2 + 7' });
+        // calculator.setExpression({
+        //     id: 'graph3',
+        //     type: 'table',
+        //     columns: [
+        //         {
+        //             latex: 'x',
+        //             values: ['1', '5'],
+        //             color: Desmos.Colors.BLUE,
+        //             columnMode: Desmos.ColumnModes.LINES
+        //         },
+        //         {
+        //             latex: 'y',
+        //             values: ['2', '4'],
+        //             dragMode: Desmos.DragModes.XY,
+        //             color: Desmos.Colors.BLUE,
+        //             columnMode: Desmos.ColumnModes.LINES
+        //         }
+        //     ]
+        // });
+        // calculator.setExpression({ id: 'graph4', latex: 'x=NONE'});
+        
+            </script>
+    </body>
+</html>
